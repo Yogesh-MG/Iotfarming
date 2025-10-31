@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">SmartIRI</string>
+    <string name="title_activity_main">SmartIRI</string>
+    <string name="package_name">com.agri.www</string>
+    <string name="custom_url_scheme">com.agri.www</string>
+</resources>

@@ -8,10 +8,10 @@ from .models import User, Device, SensorReading, PumpCommand, CurrentStatus
 from .serializer import (
     UserSerializer, DeviceSerializer, SensorReadingSerializer, 
     PumpCommandSerializer, 
-    ReadingInputSerializer, PumpUpdateSerializer
+    ReadingInputSerializer, PumpUpdateSerializer, AutoModeSerializer
 )
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from .authentication import DeviceAPIKeyAuthentication  # Custom auth for ESP API keys
-
 
 class AutoModeView(APIView):
     """
@@ -30,8 +30,11 @@ class AutoModeView(APIView):
                 return Response({'message': 'No active device found'}, status=status.HTTP_404_NOT_FOUND)
 
             enabled = serializer.validated_data['enabled']
-            device.is_auto_mode = enabled
-            device.save()
+
+            # ✅ Fix: update CurrentStatus, not Device
+            current_status, _ = CurrentStatus.objects.get_or_create(device=device)
+            current_status.auto_mode = enabled
+            current_status.save()
 
             return Response({
                 'message': f'Auto mode {"enabled" if enabled else "disabled"}',
@@ -39,7 +42,7 @@ class AutoModeView(APIView):
             }, status=status.HTTP_200_OK)
 
         except Exception as e:
-            print(f"Error in AutoModeView: {e}")  # Debugging
+            print(f"Error in AutoModeView: {e}")
             return Response({'message': 'Failed to update auto mode'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class MeView(APIView):
@@ -60,7 +63,7 @@ class StatusView(APIView):
     - If API key: Returns device's latest moisture, pump status, and pending commands (for ESP sync).
     Assumes one active device per user.
     """
-    authentication_classes = [DeviceAPIKeyAuthentication]  # Supports both JWT and API key
+    authentication_classes = [DeviceAPIKeyAuthentication, JWTAuthentication]  # Supports both JWT and API key
     permission_classes = []  # Handled by auth classes
 
     def get(self, request):
@@ -68,10 +71,12 @@ class StatusView(APIView):
             # If DeviceAPIKeyAuthentication -> request.user is a Device instance
             device = None
             is_device_request = hasattr(request.user, 'name') and not hasattr(request.user, 'username')
+            print(request.user)
 
             if hasattr(request.user, 'is_authenticated') and request.user.is_authenticated and hasattr(request.user, 'username'):
                 # JWT Authenticated user (dashboard)
                 device = Device.objects.filter(user=request.user, is_active=True).first()
+                print(device)
             elif is_device_request:
                 # API Key authenticated Device
                 device = request.user
@@ -87,7 +92,7 @@ class StatusView(APIView):
             base_data = {
                 'soil_moisture': latest_reading.moisture_level if latest_reading else current_status.current_moisture,
                 'motor_status': current_status.pump_status,
-                'is_auto_mode': device.is_auto_mode,  # New: Include auto mode status
+                'is_auto_mode': current_status.auto_mode,  # New: Include auto mode status
                 'timestamp': latest_reading.timestamp if latest_reading else current_status.last_updated,
                 'history': SensorReadingSerializer(device.readings.order_by('-timestamp')[:10], many=True).data,
             }

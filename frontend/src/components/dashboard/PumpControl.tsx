@@ -28,7 +28,9 @@ const PumpControl = ({ currentStatus, onToggle }: PumpControlProps) => {
       return;
     }
     try {
-      const response = await axios.post(`${baseUrl}/api/auto-mode/`, { enabled: autoEnabled }, { headers });
+      const response = await axios.post(`${baseUrl}/api/auto/`, { enabled: autoEnabled }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       
       if (response.status !== 200) throw new Error("Failed to update auto mode");
 

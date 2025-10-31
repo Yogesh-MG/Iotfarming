@@ -23,7 +23,7 @@ class Device(models.Model):
         verbose_name_plural = 'Devices'
 
     def __str__(self):
-        return f"{self.name} ({self.device_id})"
+        return f"({self.device_id})"
 
 
 class SensorReading(models.Model):
@@ -79,6 +79,7 @@ class CurrentStatus(models.Model):
     device = models.OneToOneField(Device, on_delete=models.CASCADE, related_name='current_status')
     current_moisture = models.FloatField(default=0)
     pump_status = models.BooleanField(default=False)  # True=ON, False=OFF
+    auto_mode = models.BooleanField(default=False)
     last_updated = models.DateTimeField(default=timezone.now)
 
     class Meta:
@@ -86,4 +87,4 @@ class CurrentStatus(models.Model):
         verbose_name_plural = 'Current Statuses'
 
     def __str__(self):
-        return f"{self.device.name} Status: Moisture {self.current_moisture}%, Pump {self.pump_status}"
+        return f"{self.device.name} Status: Moisture {self.current_moisture}%, Pump {self.pump_status} and {self.auto_mode}"

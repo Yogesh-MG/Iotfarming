@@ -70,7 +70,7 @@ class CurrentStatusSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = CurrentStatus
-        fields = ['current_moisture', 'pump_status', 'last_updated']
+        fields = ['current_moisture', 'pump_status', 'last_updated','auto_mode']
         read_only_fields = ['last_updated']
 
 
@@ -108,3 +108,4 @@ class AutoModeSerializer(serializers.Serializer):
      For /api/auto-mode/ POST - enable/disable auto mode.
     """
     enabled = serializers.BooleanField()
+

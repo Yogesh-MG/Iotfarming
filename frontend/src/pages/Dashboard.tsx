@@ -57,7 +57,9 @@ const Dashboard = () => {
     if (!token) return;  // Guard
     setIsLoading(true);
     try {
-      const response = await axios.get(`${baseUrl}/api/status/`, { headers });
+      const response = await axios.get(`${baseUrl}/api/status/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       
       const data = response.data;
       setSystemStatus(data);
@@ -107,7 +109,9 @@ const Dashboard = () => {
   const updatePumpState = async (state: boolean) => {
     if (!token) return;
     try {
-      const response = await axios.post(`${baseUrl}/api/update/`, { pump_state: state }, { headers });
+      const response = await axios.post(`${baseUrl}/api/update/`, { pump_state: state },  {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       if (response.status !== 200) throw new Error("Failed to update pump state");
 
