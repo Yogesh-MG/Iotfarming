@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Agricultural green theme */
+    --background: 40 30% 97%;
+    --foreground: 140 60% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 140 60% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 140 60% 15%;
+
+    /* Rich green for farming/nature */
+    --primary: 140 70% 35%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Earthy brown */
+    --secondary: 30 40% 55%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 40 25% 92%;
+    --muted-foreground: 140 20% 40%;
+
+    /* Light green accent */
+    --accent: 120 60% 85%;
+    --accent-foreground: 140 70% 25%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Status colors */
+    --status-on: 120 65% 45%;
+    --status-off: 0 70% 50%;
+    --status-warning: 45 95% 55%;
+
+    --border: 140 20% 85%;
+    --input: 140 20% 90%;
+    --ring: 140 70% 35%;
+
+    --radius: 0.75rem;
+
+    /* Shadows & effects */
+    --shadow-sm: 0 2px 4px hsl(140 60% 15% / 0.05);
+    --shadow-md: 0 4px 12px hsl(140 60% 15% / 0.08);
+    --shadow-lg: 0 8px 24px hsl(140 60% 15% / 0.12);
+    
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    --background: 140 30% 8%;
+    --foreground: 120 20% 95%;
+
+    --card: 140 25% 12%;
+    --card-foreground: 120 20% 95%;
+
+    --popover: 140 25% 12%;
+    --popover-foreground: 120 20% 95%;
+
+    --primary: 140 65% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 30 35% 40%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 140 20% 20%;
+    --muted-foreground: 120 15% 65%;
+
+    --accent: 120 45% 25%;
+    --accent-foreground: 120 60% 90%;
+
+    --destructive: 0 65% 45%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --status-on: 120 60% 50%;
+    --status-off: 0 65% 55%;
+    --status-warning: 45 90% 60%;
+
+    --border: 140 20% 20%;
+    --input: 140 20% 20%;
+    --ring: 140 65% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
