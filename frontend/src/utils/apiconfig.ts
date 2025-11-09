@@ -16,7 +16,7 @@ const getBaseUrl = (): string => {
 
   // Local dev fallback with instanceKey
   return instanceKey === "shared" 
-    ? "http://localhost:8000" 
+    ? "https://iotagri.pythonanywhere.com" 
     : `https://${instanceKey}.twistar.pythonanywhere.com/`;
 };
 

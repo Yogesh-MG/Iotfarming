@@ -34,12 +34,11 @@ class SensorReading(models.Model):
     device = models.ForeignKey(Device, on_delete=models.CASCADE, related_name='readings')
     moisture_level = models.FloatField(help_text='Soil moisture percentage (0-100)')
     timestamp = models.DateTimeField(default=timezone.now)
-    # Optional: Add temperature, humidity, etc., for future expansion
 
     class Meta:
         verbose_name = 'Sensor Reading'
         verbose_name_plural = 'Sensor Readings'
-        ordering = ['-timestamp']  # Latest first for queries
+        ordering = ['-timestamp']  
 
     def __str__(self):
         return f"{self.device.name}: {self.moisture_level}% at {self.timestamp}"
@@ -59,7 +58,6 @@ class PumpCommand(models.Model):
     triggered_by = models.CharField(max_length=20, default='manual', help_text='manual, auto, or api')
     timestamp = models.DateTimeField(default=timezone.now)
     acknowledged = models.BooleanField(default=False)
-    # Optional: duration if timed
 
     class Meta:
         verbose_name = 'Pump Command'
@@ -70,7 +68,6 @@ class PumpCommand(models.Model):
         return f"{self.device.name}: {self.get_action_display()} at {self.timestamp}"
 
 
-# Optional: If you need a current status snapshot (for quick /api/status/ without querying readings)
 class CurrentStatus(models.Model):
     """
     Denormalized current status for fast dashboard reads.

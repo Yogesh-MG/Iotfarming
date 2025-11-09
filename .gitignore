@@ -27,3 +27,4 @@ _.apk
 *.sw?
 .env
 /test
+/env
